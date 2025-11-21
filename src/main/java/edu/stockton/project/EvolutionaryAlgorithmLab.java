@@ -35,6 +35,7 @@ public final class EvolutionaryAlgorithmLab {
     RandomTSPMatrix.Integer problem =
         new RandomTSPMatrix.Integer(numCities, maxDistance, symmetric, triangleInequality, seed);
 
+    System.out.println(problem);
     int populationSize = 100;
     int maxGenerations = 1000;
     int numElite = 10;

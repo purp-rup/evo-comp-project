@@ -3,6 +3,9 @@ package edu.stockton.project;
 import com.opencsv.CSVWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,5 +47,10 @@ public class CSVwriter {
     }
 
     return newList;
+  }
+
+  public static long countLinesInCSV(String filePath) throws IOException {
+    Path path = Paths.get(filePath);
+    return Files.lines(path).count();
   }
 }
