@@ -251,7 +251,7 @@ public class VoronoiStippler {
     }
   }
 
-  // Main example usage
+  
   public static void main(String[] args) throws IOException {
     // Load a grayscale image
     String imagePath = "src/main/java/edu/stockton/project/dog.jpg";
@@ -280,7 +280,7 @@ public class VoronoiStippler {
     // Create stippler
     VoronoiStippler stippler = new VoronoiStippler(image);
 
-    // Parameters - adjust based on desired quality
+    // Parameters
     int numIterations = 50;
     float stippleRadius = 1f;
 
