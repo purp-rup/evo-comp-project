@@ -298,10 +298,13 @@ public class VoronoiStippler {
 
     // Save result
     File outputFile = new File("output_stippled2.png");
-    CSVwriter writer = new CSVwriter(stippler.generators);
-    writer.writeToFile();
+//    CSVwriter writer = new CSVwriter(stippler.generators);
+//    writer.writeToFile();
 
-    ImageIO.write(output, "png", outputFile);
-    System.out.println("Saved to: " + outputFile.getAbsolutePath());
+//    CSVwriter.writeCSV(stippler.generators, "output3.csv");
+//
+//    System.out.println(Arrays.deepToString(CSVwriter.readCSV("output3.csv", stippler.numStipples)));
+//    ImageIO.write(output, "png", outputFile);
+//    System.out.println("Saved to: " + outputFile.getAbsolutePath());
   }
 }
