@@ -251,19 +251,17 @@ public class VoronoiStippler {
     }
   }
 
-  
-  public static void main(String[] args) throws IOException {
-    // Load a grayscale image
-    String imagePath = "src/main/java/edu/stockton/project/dog.jpg";
-
+  public static BufferedImage loadGrayscaleImage(String imagePath) throws IOException {
     if (!new File(imagePath).exists()) {
-      System.err.println("Image not found: " + imagePath);
-      System.err.println("Please provide an input image file.");
-      return;
+      throw new Error("Image not found: " + imagePath + "\n"
+       + "Please provide an input image file.");
     }
 
-    BufferedImage image = ImageIO.read(new File(imagePath));
+    return ImageIO.read(new File(imagePath));
+  }
 
+  
+  public static double[][] stipple(BufferedImage image) throws IOException {
     // Convert to grayscale if necessary
     if (image.getType() != BufferedImage.TYPE_INT_RGB) {
       BufferedImage gray =
@@ -298,18 +296,20 @@ public class VoronoiStippler {
 
     // Save result
     File outputFile = new File("output_stippled2.png");
-    long CSVStartTime = System.currentTimeMillis();
 
-    CSVwriter.writeCSV(stippler.generators, "output3.csv");
-    long writeTime = System.currentTimeMillis();
-
-    CSVwriter.readCSV("output3.csv", stippler.numStipples);
-    long readTime = System.currentTimeMillis();
-
-    System.out.printf("Write Time: %.2fs\nWrite Time: %.2fs", (writeTime-CSVStartTime)/1000f, (readTime-writeTime)/1000f);
-
+    //Format return data
+    final int size = stippler.generators.size();
+    double[] xList = new double[size];
+    double[] yList = new double[size];
+    for (int i = 0; i < size; i++) {
+      Point2D point = stippler.generators.get(i);
+      xList[i] = point.getX();
+      yList[i] = point.getY();
+    }
 
     ImageIO.write(output, "png", outputFile);
     System.out.println("Saved to: " + outputFile.getAbsolutePath());
+
+    return new double[][]{xList, yList};
   }
 }
