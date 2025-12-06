@@ -1,7 +1,6 @@
 package edu.stockton.project;
 
 import org.cicirello.permutations.Permutation;
-import org.cicirello.search.Configurator;
 import org.cicirello.search.SolutionCostPair;
 import org.cicirello.search.evo.FitnessProportionalSelection;
 import org.cicirello.search.evo.GenerationalEvolutionaryAlgorithm;
@@ -10,23 +9,19 @@ import org.cicirello.search.operators.permutations.EnhancedEdgeRecombination;
 import org.cicirello.search.operators.permutations.PermutationInitializer;
 import org.cicirello.search.operators.permutations.ReversalMutation;
 import org.cicirello.search.problems.tsp.TSP;
-import java.io.File;
 import java.io.IOException;
-import java.util.Scanner;
 
 public class TSPArtExample
 {
     /* Private constructor to prevent instantiation. */
     private TSPArtExample() {}
 
-    public static void main(String[] args) throws IOException {
-        int numCities = (int) CSVwriter.countLinesInCSV("output3.csv");
+    public static void generateTour(double[][] points) {
+        // int numCities = (int) CSVwriter.countLinesInCSV("output3.csv");
         int maxGenerations = 100;
 
         double[] xPoints;
         double[] yPoints;
-
-        double[][] points = CSVwriter.readCSV("output3.csv", numCities);
 
         xPoints = points[0];
         yPoints = points[1];
@@ -51,7 +46,7 @@ public class TSPArtExample
                                 mutationRate,
                                 new EnhancedEdgeRecombination(),
                                 crossoverRate,
-                                new PermutationInitializer(numCities),
+                                new PermutationInitializer(xPoints.length),
                                 new InverseCostFitnessFunction<Permutation>(problem),
                                 new FitnessProportionalSelection(),
                                 numElite);
