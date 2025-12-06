@@ -32,6 +32,9 @@ public class TSPArtExample
         int populationSize = 10;
         int numElite = 1;
 
+        double bestLength = Double.MAX_VALUE;
+        Permutation bestPermutation = null;
+
         System.out.println("-------------------------------------------------");
         System.out.println("Evolutionary Algorithms");
         System.out.println("-------------------------------------------------");
@@ -52,10 +55,23 @@ public class TSPArtExample
                                 numElite);
                 SolutionCostPair<Permutation> solution = ea.optimize(maxGenerations);
                 Permutation solutionPermutation = solution.getSolution();
+                double soultionLength = problem.value(solutionPermutation);
                 String gaStr = String.format("C=%.1f; M=%.1f", crossoverRate, mutationRate);
-                System.out.printf("%-25s%12f%n", gaStr, problem.value(solutionPermutation));
+                System.out.printf("%-25s%12f%n", gaStr, soultionLength);
                 System.out.println(solutionPermutation);
+
+                if (bestLength > soultionLength) {
+                    bestPermutation = solutionPermutation;
+                    bestLength = soultionLength;
+                }
             }
+        }
+
+        // Obtain best coordinates
+        int j = 0;
+        double[][] orderedPoints = new double[xPoints.length][2];
+        for (int i : bestPermutation.toArray()) {
+            orderedPoints[j] = new double[]{xPoints[i], yPoints[i]};
         }
     }
 }
