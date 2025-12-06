@@ -1,5 +1,8 @@
 package edu.stockton.project;
 
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+
 import org.cicirello.permutations.Permutation;
 import org.cicirello.search.SolutionCostPair;
 import org.cicirello.search.evo.FitnessProportionalSelection;
@@ -9,14 +12,13 @@ import org.cicirello.search.operators.permutations.EnhancedEdgeRecombination;
 import org.cicirello.search.operators.permutations.PermutationInitializer;
 import org.cicirello.search.operators.permutations.ReversalMutation;
 import org.cicirello.search.problems.tsp.TSP;
-import java.io.IOException;
 
 public class TSPArtExample
 {
     /* Private constructor to prevent instantiation. */
     private TSPArtExample() {}
 
-    public static void generateTour(double[][] points) {
+    public static double[][] generateTour(double[][] points) {
         // int numCities = (int) CSVwriter.countLinesInCSV("output3.csv");
         int maxGenerations = 100;
 
@@ -69,9 +71,29 @@ public class TSPArtExample
 
         // Obtain best coordinates
         int j = 0;
-        double[][] orderedPoints = new double[xPoints.length][2];
+        double[][] tour = new double[xPoints.length][2];
         for (int i : bestPermutation.toArray()) {
-            orderedPoints[j] = new double[]{xPoints[i], yPoints[i]};
+            tour[j] = new double[]{xPoints[i], yPoints[i]};
         }
+
+        return tour;
+    }
+
+    public static void drawTour(double[][] tour, String outputPath, int[] dimmesions) {
+        Graphics2D image = new BufferedImage(dimmesions[0], dimmesions[1], BufferedImage.TYPE_BYTE_GRAY).createGraphics();
+
+        drawLine(tour[0], tour[1], image);
+        for (int i = 1; i < tour.length; i++) {
+            drawLine(tour[i-1], tour[i], image);
+        }
+        drawLine(tour[tour.length-1], tour[0], image);
+    }
+
+    private static void drawLine(double[] point1, double[] point2, Graphics2D image) {
+        double x1 = point1[0];
+        double x2 = point2[0];
+        double y1 = point1[1];
+        double y2 = point2[1];
+        image.drawLine(x1, y1, x2, y2);
     }
 }

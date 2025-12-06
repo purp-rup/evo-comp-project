@@ -251,17 +251,17 @@ public class VoronoiStippler {
     }
   }
 
-  
-  public static double[][] stipple(String imagePath) throws IOException {
-    // Load a grayscale image
-
+  public static BufferedImage loadGrayscaleImage(String imagePath) throws IOException {
     if (!new File(imagePath).exists()) {
       throw new Error("Image not found: " + imagePath + "\n"
        + "Please provide an input image file.");
     }
 
-    BufferedImage image = ImageIO.read(new File(imagePath));
+    return ImageIO.read(new File(imagePath));
+  }
 
+  
+  public static double[][] stipple(BufferedImage image) throws IOException {
     // Convert to grayscale if necessary
     if (image.getType() != BufferedImage.TYPE_INT_RGB) {
       BufferedImage gray =
