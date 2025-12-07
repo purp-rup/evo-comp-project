@@ -11,7 +11,7 @@ import javax.imageio.ImageIO;
  * using Lloyd's algorithm
  */
 public class VoronoiStippler {
-  private final BufferedImage image;
+  private BufferedImage image;
   private final int width;
   private final int height;
   private final float[][] density; // density[y][x] = 1 - normalized_brightness
@@ -49,8 +49,67 @@ public class VoronoiStippler {
     this.numStipples = 10000;
   }
 
-  public int getNumStipples() {
-    return numStipples;
+  
+  public static BufferedImage loadImage(String imagePath) throws IOException {
+    if (!new File(imagePath).exists()) {
+      throw new Error(
+          "Image not found: " + imagePath + "\n" + "Please provide an input image file.");
+    }
+
+    return ImageIO.read(new File(imagePath));
+  }
+
+  public double[][] stipple() throws IOException {
+    // Parameters
+    int numIterations = 50;
+    float stippleRadius = 1f;
+
+    // Convert to grayscale if necessary
+    convertImageToGrayscale();
+
+    System.out.println("Initializing stipples...");
+    initializeGenerators(numStipples);
+
+    System.out.println("Running Lloyd's algorithm...");
+    Timer lloydsTimer = new Timer();
+    iterateLloyd(numIterations);
+    lloydsTimer.stopTimer("Completed in %.2f seconds%n", Timer.units.Seconds); // stop the timing and print the message
+
+    System.out.println("Rendering output...");
+    BufferedImage output = renderStipples(stippleRadius);
+
+    // Save result
+    File outputFile = new File("output_stippled2.png");
+    ImageIO.write(output, "png", outputFile);
+    System.out.println("Saved to: " + outputFile.getAbsolutePath());
+
+    return generatorToXYList();
+  }
+
+  private double[][] generatorToXYList() {
+    final int size = generators.size();
+    double[] xList = new double[size];
+    double[] yList = new double[size];
+    for (int i = 0; i < size; i++) {
+      Point2D point = generators.get(i);
+      xList[i] = point.getX();
+      yList[i] = point.getY();
+    }
+    return new double[][]{xList, yList};
+  }
+
+  private void convertImageToGrayscale() {
+    if (image.getType() != BufferedImage.TYPE_INT_RGB) {
+      BufferedImage gray =
+          new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
+      for (int i = 0; i < image.getWidth(); i++) {
+        for (int j = 0; j < image.getHeight(); j++) {
+          int argb = image.getRGB(i, j);
+          gray.setRGB(i, j, argb);
+        }
+      }
+      image = gray;
+    }
   }
 
   /**
@@ -81,16 +140,8 @@ public class VoronoiStippler {
   }
 
   /** Initialize generators using rejection sampling weighted by density */
-  public void initializeGenerators(int numStipples) {
+  private void initializeGenerators(int numStipples) {
     generators = new ArrayList<>(numStipples);
-
-    // Compute total weight for rejection sampling
-    float totalWeight = 0;
-    for (int y = 0; y < height; y++) {
-      for (int x = 0; x < width; x++) {
-        totalWeight += density[y][x];
-      }
-    }
 
     // Rejection sampling
     int added = 0;
@@ -164,6 +215,10 @@ public class VoronoiStippler {
     }
 
     // Compute centroids
+    return computeCentroids(totalWeight, weightX, weightY);
+  }
+
+  private List<Point2D> computeCentroids(double[] totalWeight, double[] weightX, double[] weightY) {
     List<Point2D> newGenerators = new ArrayList<>();
     for (int i = 0; i < generators.size(); i++) {
       if (totalWeight[i] > 0) {
@@ -175,12 +230,11 @@ public class VoronoiStippler {
         newGenerators.add(new Point2D(generators.get(i).x, generators.get(i).y));
       }
     }
-
     return newGenerators;
   }
 
   /** Lloyd's algorithm: iteratively relax generators to centroids */
-  public void iterateLloyd(int numIterations) {
+  private void iterateLloyd(int numIterations) {
     for (int iteration = 0; iteration < numIterations; iteration++) {
       // Compute Voronoi diagram
       int[][] voronoi = computeVoronoiDiagram();
@@ -197,10 +251,9 @@ public class VoronoiStippler {
         double dy = neu.y - old.y;
         totalMovement += Math.sqrt(dx * dx + dy * dy);
       }
-
+      double avgMovement = totalMovement / ((double) newGenerators.size());
+      
       generators = newGenerators;
-
-      double avgMovement = totalMovement / generators.size();
       System.out.printf("Iteration %d: avg movement = %.4f%n", iteration + 1, avgMovement);
 
       if (avgMovement < 0.1) {
@@ -210,13 +263,8 @@ public class VoronoiStippler {
     }
   }
 
-  /** Get the final stipple positions */
-  public List<Point2D> getStipples() {
-    return new ArrayList<>(generators);
-  }
-
   /** Render stipples to a BufferedImage */
-  public BufferedImage renderStipples(float stippleRadius) {
+  private BufferedImage renderStipples(float stippleRadius) {
     BufferedImage result = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
     // Fill with white background
@@ -251,64 +299,11 @@ public class VoronoiStippler {
     }
   }
 
-  public static BufferedImage loadGrayscaleImage(String imagePath) throws IOException {
-    if (!new File(imagePath).exists()) {
-      throw new Error(
-          "Image not found: " + imagePath + "\n" + "Please provide an input image file.");
-    }
-
-    return ImageIO.read(new File(imagePath));
+  public int getHeight() {
+    return height;
   }
 
-  public static double[][] stipple(BufferedImage image) throws IOException {
-    // Convert to grayscale if necessary
-    if (image.getType() != BufferedImage.TYPE_INT_RGB) {
-      BufferedImage gray =
-          new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
-      for (int i = 0; i < image.getWidth(); i++) {
-        for (int j = 0; j < image.getHeight(); j++) {
-          int argb = image.getRGB(i, j);
-          gray.setRGB(i, j, argb);
-        }
-      }
-      image = gray;
-    }
-
-    // Create stippler
-    VoronoiStippler stippler = new VoronoiStippler(image);
-
-    // Parameters
-    int numIterations = 50;
-    float stippleRadius = 1f;
-
-    System.out.println("Initializing stipples...");
-    stippler.initializeGenerators(stippler.numStipples);
-
-    System.out.println("Running Lloyd's algorithm...");
-    long startTime = System.currentTimeMillis();
-    stippler.iterateLloyd(numIterations);
-    long elapsed = System.currentTimeMillis() - startTime;
-    System.out.printf("Completed in %.2f seconds%n", elapsed / 1000.0);
-
-    System.out.println("Rendering output...");
-    BufferedImage output = stippler.renderStipples(stippleRadius);
-
-    // Save result
-    File outputFile = new File("output_stippled2.png");
-
-    // Format return data
-    final int size = stippler.generators.size();
-    double[] xList = new double[size];
-    double[] yList = new double[size];
-    for (int i = 0; i < size; i++) {
-      Point2D point = stippler.generators.get(i);
-      xList[i] = point.getX();
-      yList[i] = point.getY();
-    }
-
-    ImageIO.write(output, "png", outputFile);
-    System.out.println("Saved to: " + outputFile.getAbsolutePath());
-
-    return new double[][] {xList, yList};
+  public int getWidth() {
+    return width;
   }
 }
