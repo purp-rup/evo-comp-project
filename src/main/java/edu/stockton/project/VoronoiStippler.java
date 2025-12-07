@@ -253,14 +253,13 @@ public class VoronoiStippler {
 
   public static BufferedImage loadGrayscaleImage(String imagePath) throws IOException {
     if (!new File(imagePath).exists()) {
-      throw new Error("Image not found: " + imagePath + "\n"
-       + "Please provide an input image file.");
+      throw new Error(
+          "Image not found: " + imagePath + "\n" + "Please provide an input image file.");
     }
 
     return ImageIO.read(new File(imagePath));
   }
 
-  
   public static double[][] stipple(BufferedImage image) throws IOException {
     // Convert to grayscale if necessary
     if (image.getType() != BufferedImage.TYPE_INT_RGB) {
@@ -297,7 +296,7 @@ public class VoronoiStippler {
     // Save result
     File outputFile = new File("output_stippled2.png");
 
-    //Format return data
+    // Format return data
     final int size = stippler.generators.size();
     double[] xList = new double[size];
     double[] yList = new double[size];
@@ -310,6 +309,6 @@ public class VoronoiStippler {
     ImageIO.write(output, "png", outputFile);
     System.out.println("Saved to: " + outputFile.getAbsolutePath());
 
-    return new double[][]{xList, yList};
+    return new double[][] {xList, yList};
   }
 }
