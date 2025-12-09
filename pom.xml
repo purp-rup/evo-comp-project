@@ -154,6 +154,13 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
+        <!-- XChart for plotting TSP tours -->
+        <dependency>
+            <groupId>org.knowm.xchart</groupId>
+            <artifactId>xchart</artifactId>
+            <version>3.8.5</version>
+        </dependency>
     </dependencies>
 
     <properties>

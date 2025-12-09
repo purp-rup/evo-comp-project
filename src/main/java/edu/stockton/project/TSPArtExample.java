@@ -14,6 +14,15 @@ import org.cicirello.search.operators.permutations.EnhancedEdgeRecombination;
 import org.cicirello.search.operators.permutations.PermutationInitializer;
 import org.cicirello.search.operators.permutations.ReversalMutation;
 import org.cicirello.search.problems.tsp.TSP;
+import org.knowm.xchart.BitmapEncoder;
+import org.knowm.xchart.XYChart;
+import org.knowm.xchart.XYChartBuilder;
+import org.knowm.xchart.XYSeries;
+import org.knowm.xchart.style.lines.SeriesLines;
+import org.knowm.xchart.style.markers.SeriesMarkers;
+
+import java.awt.Color;
+
 
 public class TSPArtExample {
   /* Private constructor to prevent instantiation. */
@@ -21,7 +30,7 @@ public class TSPArtExample {
 
   public static double[][] generateTour(double[][] points) {
     // int numCities = (int) CSVwriter.countLinesInCSV("output3.csv");
-    int maxGenerations = 100;
+    int maxGenerations = 1000;
 
     double[] xPoints;
     double[] yPoints;
@@ -31,7 +40,7 @@ public class TSPArtExample {
 
     TSP.Double problem = new TSP.Double(xPoints, yPoints);
 
-    int populationSize = 10;
+    int populationSize = 100;
     int numElite = 1;
 
     double bestLength = Double.MAX_VALUE;
@@ -74,6 +83,7 @@ public class TSPArtExample {
     double[][] tour = new double[xPoints.length][2];
     for (int i : bestPermutation.toArray()) {
       tour[j] = new double[] {xPoints[i], yPoints[i]};
+      j++;
     }
 
     return tour;
@@ -81,21 +91,70 @@ public class TSPArtExample {
 
   public static void drawTour(double[][] tour, String outputPath, int[] dimensions)
       throws IOException {
-    BufferedImage image =
-        new BufferedImage(dimensions[0], dimensions[1], BufferedImage.TYPE_BYTE_GRAY);
+    // Extract x and y coordinates from the tour
+    double[] xData = new double[tour.length + 1];
+    double[] yData = new double[tour.length + 1];
 
-    Graphics2D g2d = image.createGraphics();
 
-    drawLine(tour[0], tour[1], g2d);
-    for (int i = 1; i < tour.length; i++) {
-      drawLine(tour[i - 1], tour[i], g2d);
+    for (int i = 0; i < tour.length; i++) {
+      xData[i] = tour[i][0];
+      yData[i] = dimensions[1] - tour[i][1]; // Invert y coordinates
     }
-    drawLine(tour[tour.length - 1], tour[0], g2d);
 
-    g2d.dispose();
+    // Close the tour by connecting back to the first point
+    xData[tour.length] = tour[0][0];
+    yData[tour.length] = tour[0][1];
 
-    ImageIO.write(image, "png", new File(outputPath));
-    System.out.println("Image saved to " + outputPath);
+
+
+    // Create chart
+    XYChart chart = new XYChartBuilder()
+            .width(dimensions[0])
+            .height(dimensions[1])
+            .build();
+
+    // Customize chart
+    chart.getStyler().setChartBackgroundColor(Color.white);
+    chart.getStyler().setPlotBackgroundColor(Color.white);
+
+    chart.getStyler().setPlotBorderVisible(false);
+    chart.getStyler().setLegendVisible(false);
+    chart.getStyler().setAxisTicksVisible(false);
+    chart.getStyler().setAxisTicksLineVisible(false);
+    chart.getStyler().setAxisTitlesVisible(false);
+    chart.getStyler().setChartTitleVisible(false);
+    chart.getStyler().setPlotGridLinesVisible(false);
+
+    // Set Axis bounds to match dimensions
+    chart.getStyler().setXAxisMin(0.0);
+    chart.getStyler().setXAxisMax((double) dimensions[0]);
+    chart.getStyler().setYAxisMin(0.0);
+    chart.getStyler().setYAxisMax((double) dimensions[1]);
+
+    XYSeries series = chart.addSeries("TSP Tour", xData, yData);
+    series.setLineColor(Color.black);
+    series.setLineStyle(SeriesLines.SOLID);
+    series.setMarker(SeriesMarkers.NONE);
+    series.setLineWidth(1.0f);
+
+    BitmapEncoder.saveBitmap(chart, outputPath, BitmapEncoder.BitmapFormat.PNG);
+
+
+//    BufferedImage image =
+//        new BufferedImage(dimensions[0], dimensions[1], BufferedImage.TYPE_BYTE_GRAY);
+//
+//    Graphics2D g2d = image.createGraphics();
+//
+//    drawLine(tour[0], tour[1], g2d);
+//    for (int i = 1; i < tour.length; i++) {
+//      drawLine(tour[i - 1], tour[i], g2d);
+//    }
+//    drawLine(tour[tour.length - 1], tour[0], g2d);
+//
+//    g2d.dispose();
+//
+//    ImageIO.write(image, "png", new File(outputPath));
+//    System.out.println("Image saved to " + outputPath);
 
     //    Graphics2D image =
     //        new BufferedImage(dimensions[0], dimensions[1], BufferedImage.TYPE_BYTE_GRAY)
@@ -113,6 +172,6 @@ public class TSPArtExample {
     double x2 = point2[0];
     double y1 = point1[1];
     double y2 = point2[1];
-    image.drawLine(x1, y1, x2, y2);
+    //    image.drawLine(x1, y1, x2, y2);
   }
 }
