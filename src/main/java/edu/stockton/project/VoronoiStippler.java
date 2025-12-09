@@ -46,7 +46,7 @@ public class VoronoiStippler {
     this.width = image.getWidth();
     this.height = image.getHeight();
     this.density = computeDensityFunction(image);
-    this.numStipples = 500;
+    this.numStipples = 2000;
   }
 
   public int getNumStipples() {

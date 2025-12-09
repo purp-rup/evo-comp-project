@@ -2,7 +2,6 @@ package edu.stockton.project;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Arrays;
 
 /** Main class for the Evolutionary Computation Project. */
 public class Main {
@@ -10,16 +9,16 @@ public class Main {
     String inputImage;
     String outputPath;
     double scaleFactor = 3.0;
-//    if (args.length > 0) {
-//      inputImage = "src/main/java/edu/stockton/project/dog.jpg";
-//    } else {
-//      inputImage = args[0];
-//    }
-//    if (args.length > 1) {
-//      outputPath = "src/main/java/edu/stockton/project/dog-out.jpg";
-//    } else {
-//      outputPath = args[1];
-//    }
+    //    if (args.length > 0) {
+    //      inputImage = "src/main/java/edu/stockton/project/dog.jpg";
+    //    } else {
+    //      inputImage = args[0];
+    //    }
+    //    if (args.length > 1) {
+    //      outputPath = "src/main/java/edu/stockton/project/dog-out.jpg";
+    //    } else {
+    //      outputPath = args[1];
+    //    }
 
     inputImage = "src/main/java/edu/stockton/project/dogwhite.jpg";
     outputPath = "src/main/java/edu/stockton/project/dog-out";
@@ -31,17 +30,18 @@ public class Main {
 
     double[][] tour = TSPArtExample.generateTour(scaledPoints);
 
-    int[] scaledDimensions = new int[] {
-            (int) (rawGrayscale.getWidth() * scaleFactor),
-            (int) (rawGrayscale.getHeight() * scaleFactor)
-    };
+    int[] scaledDimensions =
+        new int[] {
+          (int) (rawGrayscale.getWidth() * scaleFactor),
+          (int) (rawGrayscale.getHeight() * scaleFactor)
+        };
 
-    TSPArtExample.drawTour(
-        tour, outputPath, scaledDimensions);
+    TSPArtExample.drawTour(tour, outputPath, scaledDimensions);
   }
 
   /**
    * Scale coordinates for higher resolution output.
+   *
    * @param points Points array of [x, y]
    * @param scale Scale factor
    * @return Scaled points

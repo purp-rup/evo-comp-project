@@ -27,7 +27,7 @@ public final class EvolutionaryAlgorithmLab {
     Configurator.configureRandomGenerator(101);
 
     int numCities = 100;
-    int maxDistance = 1000000;
+    int maxDistance = 10000000;
     boolean symmetric = true;
     boolean triangleInequality = true;
     long seed = 42;
