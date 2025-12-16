@@ -11,8 +11,8 @@ public class Main {
     double scaleFactor = 3.0;
 
     // Specify input and output image paths
-    inputImage = "src/main/java/edu/stockton/project/dogwhite.jpg";
-    outputPath = "src/main/java/edu/stockton/project/dog-out";
+    inputImage = (args.length > 0) ? args[0] : "src/main/java/edu/stockton/project/dogwhite.jpg";
+    outputPath = (args.length > 1) ? args[1] : "src/main/java/edu/stockton/project/dog-out";
 
     BufferedImage rawGrayscale = VoronoiStippler.loadGrayscaleImage(inputImage);
 
