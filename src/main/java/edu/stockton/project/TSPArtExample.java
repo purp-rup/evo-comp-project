@@ -2,7 +2,6 @@ package edu.stockton.project;
 
 import java.awt.Color;
 import java.io.IOException;
-import java.util.Arrays;
 import org.cicirello.permutations.Permutation;
 import org.cicirello.search.SolutionCostPair;
 import org.cicirello.search.evo.FitnessProportionalSelection;
@@ -19,20 +18,18 @@ import org.knowm.xchart.XYSeries;
 import org.knowm.xchart.style.lines.SeriesLines;
 import org.knowm.xchart.style.markers.SeriesMarkers;
 
+/** Test class for creating and drawing tours. */
 public class TSPArtExample {
   /* Private constructor to prevent instantiation. */
   private TSPArtExample() {}
 
   public static double[][] generateTour(double[][] points) {
-    // int numCities = (int) CSVwriter.countLinesInCSV("output3.csv");
     int maxGenerations = 100000;
 
-    double[] xPoints;
-    double[] yPoints;
+    double[] xPoints = points[0];
+    double[] yPoints = points[1];
 
-    xPoints = points[0];
-    yPoints = points[1];
-
+    // Print order of coordinates before EA
     StringBuilder printValue = new StringBuilder();
     for (int i = 0; i < xPoints.length; i++) {
       printValue.append("(").append(xPoints[i]).append(", ").append(yPoints[i]).append(") -> ");
@@ -53,8 +50,6 @@ public class TSPArtExample {
     System.out.println("-------------------------------------------------");
     System.out.printf("%-25s%12s%n", "EA", "best-tour-length");
     System.out.println("-------------------------------------------------");
-    //    for (double crossoverRate = 0.1; crossoverRate < 0.95; crossoverRate += 0.2) {
-    //      for (double mutationRate = 0.1; mutationRate < 0.95; mutationRate += 0.2) {
     double mutationRate = 0.3;
     double crossoverRate = 0.1;
     GenerationalEvolutionaryAlgorithm<Permutation> ea =
@@ -78,43 +73,35 @@ public class TSPArtExample {
       bestPermutation = solutionPermutation;
       bestLength = solutionLength;
     }
-    //      }
-    //    }
 
     // Obtain best coordinates
     double[][] tour = new double[xPoints.length][2];
     assert bestPermutation != null;
+
     printValue = new StringBuilder();
+
     int j = 0;
     for (int i : bestPermutation.toArray()) {
       tour[j] = new double[] {xPoints[i], yPoints[i]};
       j++;
+
+      // Print order of coordinates after EA
       printValue.append("(").append(xPoints[i]).append(", ").append(yPoints[i]).append(") -> ");
     }
-
-    double[] distances = new double[xPoints.length + 1];
-    for (int i = 1; i < xPoints.length; i++) {
-      double x1 = tour[i - 1][0];
-      double y1 = tour[i - 1][1];
-      double x2 = tour[i][0];
-      double y2 = tour[i][1];
-      distances[i] = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-      System.out.print(distances[i] + ", ");
-    }
-
-    System.out.println();
-
-    System.out.println("MAX DISTANCE:");
-    System.out.println(Arrays.stream(distances).max());
-
-    System.out.println("MIN DISTANCE:");
-    System.out.println(Arrays.stream(distances).min());
 
     System.out.println(printValue);
 
     return tour;
   }
 
+  /**
+   * Draws a tour on a graph using the XChart library.
+   *
+   * @param tour The tour that will be drawn
+   * @param outputPath The output path
+   * @param dimensions The dimensions of the graph
+   * @throws IOException Image cannot be written to outputPath
+   */
   public static void drawTour(double[][] tour, String outputPath, int[] dimensions)
       throws IOException {
     // Extract x and y coordinates from the tour
@@ -157,6 +144,7 @@ public class TSPArtExample {
     series.setMarker(SeriesMarkers.NONE);
     series.setLineWidth(1.0f);
 
+    // Save final image
     BitmapEncoder.saveBitmap(chart, outputPath, BitmapEncoder.BitmapFormat.PNG);
   }
 }

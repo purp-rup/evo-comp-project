@@ -3,33 +3,27 @@ package edu.stockton.project;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-/** Main class for the Evolutionary Computation Project. */
+/** Main class for performing manual testing. Uses VoronoiStippler and TSPArtExample classes. */
 public class Main {
   public static void main(String[] args) throws IOException {
     String inputImage;
     String outputPath;
     double scaleFactor = 3.0;
-    //    if (args.length > 0) {
-    //      inputImage = "src/main/java/edu/stockton/project/dog.jpg";
-    //    } else {
-    //      inputImage = args[0];
-    //    }
-    //    if (args.length > 1) {
-    //      outputPath = "src/main/java/edu/stockton/project/dog-out.jpg";
-    //    } else {
-    //      outputPath = args[1];
-    //    }
 
+    // Specify input and output image paths
     inputImage = "src/main/java/edu/stockton/project/dogwhite.jpg";
     outputPath = "src/main/java/edu/stockton/project/dog-out";
 
     BufferedImage rawGrayscale = VoronoiStippler.loadGrayscaleImage(inputImage);
 
+    // Collect points and scale
     double[][] points = VoronoiStippler.stipple(rawGrayscale);
     double[][] scaledPoints = scalePoints(points, scaleFactor);
 
+    // Create tour
     double[][] tour = TSPArtExample.generateTour(scaledPoints);
 
+    // Calculate scaled dimensions
     int[] scaledDimensions =
         new int[] {
           (int) (rawGrayscale.getWidth() * scaleFactor),
@@ -44,7 +38,7 @@ public class Main {
    *
    * @param points Points array of [x, y]
    * @param scale Scale factor
-   * @return Scaled points
+   * @return double[][] containing scaled points
    */
   private static double[][] scalePoints(double[][] points, double scale) {
     double[] xPoints = points[0];

@@ -1,0 +1,281 @@
+/* ============================================
+   ROOT - Global Variables
+   ============================================ */
+.root {
+    /* Color Palette */
+    -fx-background-dark: #2b2b2b;
+    -fx-background-medium: #3c3f41;
+    -fx-background-light: #555555;
+
+    -fx-text-primary: #ffffff;
+    -fx-text-secondary: #cccccc;
+    -fx-text-tertiary: #bbbbbb;
+    -fx-text-muted: #888888;
+
+    -fx-accent-blue: #4a90e2;
+    -fx-accent-green: #5cb85c;
+    -fx-accent-orange: #f0ad4e;
+    -fx-accent-red: #d9534f;
+
+    /* Main Background */
+    -fx-background-color: -fx-background-dark;
+}
+
+/* ============================================
+   MAIN LAYOUT
+   ============================================ */
+.main-border-pane {
+    -fx-background-color: -fx-background-dark;
+}
+
+.content-area {
+    -fx-background-color: -fx-background-dark;
+}
+
+/* ============================================
+   MENU BAR
+   ============================================ */
+.menu-bar {
+    -fx-background-color: -fx-background-medium;
+}
+
+.menu-bar .label {
+    -fx-text-fill: -fx-text-secondary;
+}
+
+/* ============================================
+   SCROLL PANE
+   ============================================ */
+.control-scroll-pane {
+    -fx-background-color: -fx-background-dark;
+    -fx-background: -fx-background-dark;
+}
+
+.control-scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+/* ============================================
+   PANELS
+   ============================================ */
+.control-panel {
+    -fx-background-color: -fx-background-medium;
+    -fx-padding: 15;
+    -fx-background-radius: 5;
+}
+
+.display-panel {
+    -fx-background-color: -fx-background-medium;
+    -fx-padding: 15;
+    -fx-background-radius: 5;
+}
+
+/* ============================================
+   LABELS
+   ============================================ */
+.section-header {
+    -fx-text-fill: -fx-text-tertiary;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+.label-primary {
+    -fx-text-fill: -fx-text-secondary;
+}
+
+.label-muted {
+    -fx-text-fill: -fx-text-muted;
+    -fx-font-size: 11px;
+}
+
+.label-hint {
+    -fx-text-fill: -fx-text-muted;
+    -fx-font-size: 10px;
+}
+
+.label-step {
+    -fx-text-fill: -fx-text-secondary;
+    -fx-font-size: 13px;
+    -fx-min-width: 180;
+    -fx-alignment: center;
+}
+
+.display-title {
+    -fx-text-fill: white;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.display-subtitle {
+    -fx-text-fill: -fx-text-secondary;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.value-label {
+    -fx-text-fill: -fx-accent-blue;
+    -fx-font-weight: bold;
+    -fx-min-width: 50;
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+.button {
+    -fx-background-radius: 3;
+    -fx-cursor: hand;
+}
+
+.button-load {
+    -fx-background-color: -fx-accent-blue;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+}
+
+.button-load:hover {
+    -fx-background-color: derive(-fx-accent-blue, -10%);
+}
+
+.button-run {
+    -fx-background-color: -fx-accent-green;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-pref-height: 45;
+}
+
+.button-run:hover {
+    -fx-background-color: derive(-fx-accent-green, -10%);
+}
+
+.button-run:disabled {
+    -fx-opacity: 0.5;
+}
+
+.button-nav {
+    -fx-background-color: -fx-accent-blue;
+    -fx-text-fill: white;
+}
+
+.button-nav:hover {
+    -fx-background-color: derive(-fx-accent-blue, -10%);
+}
+
+.button-save {
+    -fx-background-color: -fx-accent-orange;
+    -fx-text-fill: white;
+}
+
+.button-save:hover {
+    -fx-background-color: derive(-fx-accent-orange, -10%);
+}
+
+.button-cancel {
+    -fx-background-color: -fx-accent-red;
+    -fx-text-fill: white;
+}
+
+.button-cancel:hover {
+    -fx-background-color: derive(-fx-accent-red, -10%);
+}
+
+/* ============================================
+   COMBO BOXES
+   ============================================ */
+.combo-box {
+    -fx-background-color: -fx-background-dark;
+}
+
+.combo-box .list-cell {
+    -fx-background-color: -fx-background-dark;
+    -fx-text-fill: -fx-text-primary;
+}
+
+.combo-box-popup .list-view {
+    -fx-background-color: -fx-background-medium;
+}
+
+.combo-box-popup .list-view .list-cell {
+    -fx-text-fill: -fx-text-primary;
+}
+
+.combo-box-popup .list-view .list-cell:hover {
+    -fx-background-color: -fx-accent-blue;
+}
+
+/* ============================================
+   SPINNERS
+   ============================================ */
+.spinner {
+    -fx-background-color: -fx-background-dark;
+}
+
+.spinner .text-field {
+    -fx-text-fill: -fx-background-medium;
+}
+
+/* ============================================
+   SLIDERS
+   ============================================ */
+.slider .track {
+    -fx-background-color: -fx-background-light;
+}
+
+.slider .thumb {
+    -fx-background-color: -fx-accent-blue;
+}
+
+/* ============================================
+   RADIO BUTTONS
+   ============================================ */
+.radio-button {
+    -fx-text-fill: -fx-text-secondary;
+}
+
+.radio-button:selected .dot {
+    -fx-background-color: -fx-accent-blue;
+}
+
+/* ============================================
+   SEPARATORS
+   ============================================ */
+.separator .line {
+    -fx-background-color: -fx-background-light;
+}
+
+/* ============================================
+   IMAGE CONTAINERS
+   ============================================ */
+.image-container {
+    -fx-background-color: -fx-background-dark;
+    -fx-border-color: -fx-background-light;
+    -fx-border-width: 2;
+}
+
+/* ============================================
+   STATUS BAR
+   ============================================ */
+.status-bar {
+    -fx-background-color: -fx-background-medium;
+    -fx-padding: 8;
+}
+
+.status-label {
+    -fx-text-fill: -fx-text-secondary;
+    -fx-font-size: 12px;
+}
+
+/* ============================================
+   PROGRESS BAR
+   ============================================ */
+.progress-bar {
+    -fx-pref-width: 300;
+}
+
+.progress-bar .track {
+    -fx-background-color: -fx-background-dark;
+}
+
+.progress-bar .bar {
+    -fx-background-color: -fx-accent-blue;
+}

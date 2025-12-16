@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="edu.stockton.project.gui.MainController"
+            styleClass="main-border-pane"
+            stylesheets="@style.css"
+            minWidth="1200" minHeight="700">
+
+    <!-- Top Menu Bar -->
+    <top>
+        <MenuBar>
+            <Menu text="File">
+                <MenuItem text="Open Image..." onAction="#onLoadImage"/>
+                <MenuItem text="Save Current Image..." onAction="#onSaveImage"/>
+                <SeparatorMenuItem/>
+                <MenuItem text="Exit"/>
+            </Menu>
+<!--            <Menu text="Help">-->
+<!--                <MenuItem text="About"/>-->
+<!--            </Menu>-->
+        </MenuBar>
+    </top>
+
+    <!-- Main Content Area -->
+    <center>
+        <HBox spacing="10" styleClass="content-area">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+
+            <!-- Left Panel - Control Panel with ScrollPane -->
+            <ScrollPane fitToWidth="true" styleClass="control-scroll-pane"
+                        hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+                        prefWidth="320" minWidth="320" maxWidth="320">
+                <VBox spacing="15" styleClass="control-panel">
+
+                    <!-- File Selection Section -->
+                    <VBox spacing="8">
+                        <Label text="Image Selection" styleClass="section-header"/>
+                        <Button fx:id="loadImageButton" text="Load Image" onAction="#onLoadImage"
+                                maxWidth="Infinity" styleClass="button-load"/>
+                        <Label fx:id="fileNameLabel" text="No image loaded"
+                               styleClass="label-muted" wrapText="true"/>
+                    </VBox>
+
+                    <Separator/>
+
+                    <!-- Stipple Configuration -->
+                    <VBox spacing="8">
+                        <Label text="Stippling" styleClass="section-header"/>
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Label text="Stipple Count:" styleClass="label-primary"/>
+                            <Spinner fx:id="stippleCountSpinner" prefWidth="110" editable="true"/>
+                        </HBox>
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Label text="Scale Factor:" styleClass="label-primary"/>
+                            <Spinner fx:id="scaleFactorSpinner" prefWidth="110" editable="true"/>
+                        </HBox>
+                        <Label text="1.0 = original, 2.0 = 2x resolution"
+                               styleClass="label-hint" wrapText="true"/>
+                    </VBox>
+
+                    <Separator/>
+
+                    <!-- EA Configuration Section -->
+                    <VBox spacing="8">
+                        <Label text="Evolutionary Algorithm" styleClass="section-header"/>
+
+                        <!-- Mutation Operator -->
+                        <VBox spacing="5">
+                            <Label text="Mutation Operator:" styleClass="label-primary"/>
+                            <ComboBox fx:id="mutationComboBox" maxWidth="Infinity"/>
+                        </VBox>
+
+                        <!-- Crossover Operator -->
+                        <VBox spacing="5">
+                            <Label text="Crossover Operator:" styleClass="label-primary"/>
+                            <ComboBox fx:id="crossoverComboBox" maxWidth="Infinity"/>
+                        </VBox>
+                    </VBox>
+
+                    <Separator/>
+
+                    <!-- Parameter Selection Mode -->
+                    <VBox spacing="8">
+                        <Label text="Parameter Mode" styleClass="section-header"/>
+                        <RadioButton fx:id="gridSearchRadio" text="Grid Search"/>
+                        <RadioButton fx:id="manualSelectRadio" text="Manual Selection"/>
+                    </VBox>
+
+                    <Separator/>
+
+                    <!-- Grid Search Panel -->
+                    <VBox fx:id="gridSearchPanel" spacing="10">
+                        <Label text="Grid Search Parameters" styleClass="section-header"/>
+
+                        <!-- Crossover Rate Range -->
+                        <VBox spacing="5">
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Label text="Crossover Min:" styleClass="label-primary"/>
+                                <Label fx:id="crossoverMinLabel" styleClass="value-label"/>
+                            </HBox>
+                            <Slider fx:id="crossoverMinSlider" min="0" max="1" value="0.1"
+                                    blockIncrement="0.05" showTickMarks="false"/>
+                        </VBox>
+
+                        <VBox spacing="5">
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Label text="Crossover Max:" styleClass="label-primary"/>
+                                <Label fx:id="crossoverMaxLabel" styleClass="value-label"/>
+                            </HBox>
+                            <Slider fx:id="crossoverMaxSlider" min="0" max="1" value="0.9"
+                                    blockIncrement="0.05" showTickMarks="false"/>
+                        </VBox>
+
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Label text="Crossover Step:" styleClass="label-primary"/>
+                            <Spinner fx:id="crossoverStepSpinner" prefWidth="80" editable="true"/>
+                        </HBox>
+
+                        <!-- Mutation Rate Range -->
+                        <VBox spacing="5">
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Label text="Mutation Min:" styleClass="label-primary"/>
+                                <Label fx:id="mutationMinLabel" styleClass="value-label"/>
+                            </HBox>
+                            <Slider fx:id="mutationMinSlider" min="0" max="1" value="0.1"
+                                    blockIncrement="0.05" showTickMarks="false"/>
+                        </VBox>
+
+                        <VBox spacing="5">
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Label text="Mutation Max:" styleClass="label-primary"/>
+                                <Label fx:id="mutationMaxLabel" styleClass="value-label"/>
+                            </HBox>
+                            <Slider fx:id="mutationMaxSlider" min="0" max="1" value="0.9"
+                                    blockIncrement="0.05" showTickMarks="false"/>
+                        </VBox>
+
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Label text="Mutation Step:" styleClass="label-primary"/>
+                            <Spinner fx:id="mutationStepSpinner" prefWidth="80" editable="true"/>
+                        </HBox>
+                    </VBox>
+
+                    <!-- Manual Selection Panel -->
+                    <VBox fx:id="manualSelectionPanel" spacing="10" visible="false" managed="false">
+                        <Label text="Manual Parameters" styleClass="section-header"/>
+
+                        <VBox spacing="5">
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Label text="Crossover Rate:" styleClass="label-primary"/>
+                                <Label fx:id="manualCrossoverLabel" styleClass="value-label"/>
+                            </HBox>
+                            <Slider fx:id="manualCrossoverSlider" min="0" max="1" value="0.5"
+                                    blockIncrement="0.05" showTickMarks="false"/>
+                        </VBox>
+
+                        <VBox spacing="5">
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Label text="Mutation Rate:" styleClass="label-primary"/>
+                                <Label fx:id="manualMutationLabel" styleClass="value-label"/>
+                            </HBox>
+                            <Slider fx:id="manualMutationSlider" min="0" max="1" value="0.5"
+                                    blockIncrement="0.05" showTickMarks="false"/>
+                        </VBox>
+                    </VBox>
+
+                    <Separator/>
+
+                    <!-- Common EA Parameters -->
+                    <VBox spacing="8">
+                        <Label text="Common Parameters" styleClass="section-header"/>
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Label text="Population Size:" styleClass="label-primary"/>
+                            <Spinner fx:id="populationSpinner" prefWidth="100" editable="true"/>
+                        </HBox>
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Label text="Max Generations:" styleClass="label-primary"/>
+                            <Spinner fx:id="generationsSpinner" prefWidth="100" editable="true"/>
+                        </HBox>
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Label text="Elite Count:" styleClass="label-primary"/>
+                            <Spinner fx:id="eliteSpinner" prefWidth="100" editable="true"/>
+                        </HBox>
+                    </VBox>
+
+                    <Separator/>
+
+                    <!-- Run Button -->
+                    <Button fx:id="runTspButton" text="RUN TSP ART" onAction="#onRunTSP"
+                            maxWidth="Infinity" styleClass="button-run"/>
+
+                    <!-- Spacer to push everything up -->
+                    <Region VBox.vgrow="ALWAYS"/>
+
+                </VBox>
+            </ScrollPane>
+
+            <!-- Right Panel - Display Area -->
+            <VBox spacing="10" HBox.hgrow="ALWAYS" styleClass="display-panel">
+
+                <!-- Title -->
+                <Label text="TSP Art Generation" styleClass="display-title"/>
+
+                <!-- Images Display Area -->
+                <HBox spacing="20" alignment="CENTER" VBox.vgrow="ALWAYS">
+
+                    <!-- Stippled Image View -->
+                    <VBox spacing="8" alignment="CENTER" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+                        <Label text="Stippled Image" styleClass="display-subtitle"/>
+                        <StackPane styleClass="image-container"
+                                   VBox.vgrow="ALWAYS" maxWidth="800" maxHeight="800">
+                            <ImageView fx:id="stippledImageView" preserveRatio="true" smooth="true"
+                                       fitWidth="600" fitHeight="600"/>
+                        </StackPane>
+                    </VBox>
+
+                    <!-- TSP Art Image View -->
+                    <VBox spacing="8" alignment="CENTER" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+                        <Label text="TSP Art Result" styleClass="display-subtitle"/>
+                        <StackPane styleClass="image-container"
+                                   VBox.vgrow="ALWAYS" maxWidth="800" maxHeight="800">
+                            <ImageView fx:id="tspArtImageView" preserveRatio="true" smooth="true"
+                                       fitWidth="600" fitHeight="600"/>
+                        </StackPane>
+                    </VBox>
+
+                </HBox>
+
+                <!-- Navigation Controls -->
+                <HBox spacing="15" alignment="CENTER">
+                    <Button fx:id="previousStepButton" text="◀ Previous" onAction="#onPreviousStep"
+                            styleClass="button-nav"/>
+                    <Label fx:id="stepLabel" text="Step 1 of 3: Original" styleClass="label-step"/>
+                    <Button fx:id="nextStepButton" text="Next ▶" onAction="#onNextStep"
+                            styleClass="button-nav"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="saveImageButton" text="Save Current Image" onAction="#onSaveImage"
+                            styleClass="button-save"/>
+                </HBox>
+
+            </VBox>
+
+        </HBox>
+    </center>
+
+    <!-- Bottom Status Bar -->
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_LEFT" styleClass="status-bar">
+            <Label fx:id="statusLabel" text="Ready" styleClass="status-label"/>
+            <ProgressBar fx:id="progressBar" progress="0"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="cancelButton" text="Cancel" onAction="#onCancel"
+                    styleClass="button-cancel"
+                    visible="false" managed="false"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

@@ -7,8 +7,8 @@ import java.util.*;
 import javax.imageio.ImageIO;
 
 /**
- * Weighted Voronoi Stippler based on Secord (2002) Generates stipple drawings from grayscale images
- * using Lloyd's algorithm
+ * Weighted Voronoi Stippler based on Secord (2002). Generates stipple drawings from grayscale
+ * images using Lloyd's algorithm.
  */
 public class VoronoiStippler {
   private final BufferedImage image;
@@ -19,6 +19,21 @@ public class VoronoiStippler {
   private final int numStipples;
   private final Random random = new Random(42);
 
+  /**
+   * Constructor that accepts custom stipple counts for user input.
+   *
+   * @param image The image that will be stippled
+   * @param numStipples The number of stipples that will be generated
+   */
+  public VoronoiStippler(BufferedImage image, int numStipples) {
+    this.image = image;
+    this.width = image.getWidth();
+    this.height = image.getHeight();
+    this.density = computeDensityFunction(image);
+    this.numStipples = numStipples;
+  }
+
+  /** Stores x-y coords in a single object. */
   public static class Point2D {
     public double x, y;
 
@@ -41,21 +56,12 @@ public class VoronoiStippler {
     }
   }
 
-  public VoronoiStippler(BufferedImage image) {
-    this.image = image;
-    this.width = image.getWidth();
-    this.height = image.getHeight();
-    this.density = computeDensityFunction(image);
-    this.numStipples = 2000;
-  }
-
-  public int getNumStipples() {
-    return numStipples;
-  }
-
   /**
-   * Compute density function: ρ(x,y) = 1 - normalized_brightness Higher values attract more
-   * stipples (dark areas)
+   * Compute density function for weighted Voronoi stippling. Represents how many stipples should be
+   * placed in each region of the image.
+   *
+   * @param img The BufferedImage to compute density for
+   * @return A 2D array of density values where density[y][x] is in the range [0, 1]
    */
   private float[][] computeDensityFunction(BufferedImage img) {
     float[][] density = new float[height][width];
@@ -80,7 +86,11 @@ public class VoronoiStippler {
     return density;
   }
 
-  /** Initialize generators using rejection sampling weighted by density */
+  /**
+   * Initialize generators using rejection sampling weighted by density.
+   *
+   * @param numStipples The number of stipples/points to create
+   */
   public void initializeGenerators(int numStipples) {
     generators = new ArrayList<>(numStipples);
 
@@ -114,8 +124,9 @@ public class VoronoiStippler {
   }
 
   /**
-   * Compute Voronoi diagram: for each pixel, find closest generator Returns: voronoi[y][x] = index
-   * of closest generator
+   * Compute Voronoi diagram: for each pixel, find the closest generator.
+   *
+   * @return voronoi[y][x] = index of closest generator
    */
   private int[][] computeVoronoiDiagram() {
     int[][] voronoi = new int[height][width];
@@ -145,7 +156,12 @@ public class VoronoiStippler {
     return voronoi;
   }
 
-  /** Compute weighted centroid of each Voronoi region Weights are given by the density function */
+  /**
+   * Compute weighted centroid of each Voronoi region. Weights are given by the density function.
+   *
+   * @param voronoi Voronoi Diagram
+   * @return New positions of generators
+   */
   private List<Point2D> computeWeightedCentroids(int[][] voronoi) {
     double[] weightX = new double[generators.size()];
     double[] weightY = new double[generators.size()];
@@ -179,7 +195,11 @@ public class VoronoiStippler {
     return newGenerators;
   }
 
-  /** Lloyd's algorithm: iteratively relax generators to centroids */
+  /**
+   * Iteratively relax generators to centroids using Lloyd's algorithm.
+   *
+   * @param numIterations The maximum number of iterations
+   */
   public void iterateLloyd(int numIterations) {
     for (int iteration = 0; iteration < numIterations; iteration++) {
       // Compute Voronoi diagram
@@ -210,12 +230,58 @@ public class VoronoiStippler {
     }
   }
 
-  /** Get the final stipple positions */
-  public List<Point2D> getStipples() {
-    return new ArrayList<>(generators);
+  /**
+   * Performs a single iteration of Lloyd's algorithm for progress reporting.
+   *
+   * @return The average movement
+   */
+  public double iterateLloydSingleIteration() {
+    // Compute Voronoi diagram
+    int[][] voronoi = computeVoronoiDiagram();
+
+    // Compute new generator positions at centroids
+    List<Point2D> newGenerators = computeWeightedCentroids(voronoi);
+
+    // Calculate average movement for convergence check
+    double totalMovement = 0;
+    for (int i = 0; i < generators.size(); i++) {
+      Point2D old = generators.get(i);
+      Point2D neu = newGenerators.get(i);
+      double dx = neu.x - old.x;
+      double dy = neu.y - old.y;
+      totalMovement += Math.sqrt(dx * dx + dy * dy);
+    }
+
+    generators = newGenerators;
+
+    return totalMovement / generators.size();
   }
 
-  /** Render stipples to a BufferedImage */
+  /**
+   * Get stipple points as a 2D array for TSP processing.
+   *
+   * @return double[][] where [0] is x coords and [1] is y coords
+   */
+  public double[][] getStipplePointsArray() {
+    final int size = generators.size();
+    double[] xList = new double[size];
+    double[] yList = new double[size];
+
+    for (int i = 0; i < size; i++) {
+      Point2D point = generators.get(i);
+      xList[i] = point.getX();
+      yList[i] = point.getY();
+    }
+
+    return new double[][] {xList, yList};
+  }
+
+  /**
+   * Renders stipples to a BufferedImage.
+   *
+   * @param stippleRadius The radius of each stipple
+   * @return The stippled BufferedImage
+   */
   public BufferedImage renderStipples(float stippleRadius) {
     BufferedImage result = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
@@ -234,7 +300,15 @@ public class VoronoiStippler {
     return result;
   }
 
-  /** Draw a filled circle (Bresenham-like approximation) */
+  /**
+   * Draws a filled circle on a BufferedImage (Bresenham-like approximation).
+   *
+   * @param img The BufferedImage being drawn on
+   * @param cx The x-coord of the circle's center
+   * @param cy The y-coord of the circle's center
+   * @param radius The radius of the circle in pixels
+   * @param color The color of the circle
+   */
   private void drawCircle(BufferedImage img, int cx, int cy, int radius, int color) {
     int r2 = radius * radius;
 
@@ -251,6 +325,13 @@ public class VoronoiStippler {
     }
   }
 
+  /**
+   * Reads a grayscale image.
+   *
+   * @param imagePath The location of the image as a path
+   * @return BufferedImage from the imagePath
+   * @throws IOException Image cannot be found
+   */
   public static BufferedImage loadGrayscaleImage(String imagePath) throws IOException {
     if (!new File(imagePath).exists()) {
       throw new Error(
@@ -260,6 +341,13 @@ public class VoronoiStippler {
     return ImageIO.read(new File(imagePath));
   }
 
+  /**
+   * Stipples image and outputs to project directory.
+   *
+   * @param image The image to be stippled
+   * @return A 2D array of the x-y coordinates for each stipple
+   * @throws IOException Image cannot be output to directory
+   */
   public static double[][] stipple(BufferedImage image) throws IOException {
     // Convert to grayscale if necessary
     if (image.getType() != BufferedImage.TYPE_INT_RGB) {
@@ -275,7 +363,7 @@ public class VoronoiStippler {
     }
 
     // Create stippler
-    VoronoiStippler stippler = new VoronoiStippler(image);
+    VoronoiStippler stippler = new VoronoiStippler(image, 2000);
 
     // Parameters
     int numIterations = 50;

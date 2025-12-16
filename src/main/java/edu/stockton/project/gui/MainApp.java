@@ -6,21 +6,21 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/** Main JavaFX Application for TSP Art Generator */
 public class MainApp extends Application {
 
   @Override
-  public void start(Stage stage) throws Exception {
-    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/main-view.fxml"));
+  public void start(Stage primaryStage) throws Exception {
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("/main-view.fxml"));
+    Parent root = loader.load();
 
-    Parent root = fxmlLoader.load();
+    Scene scene = new Scene(root, 1650, 850);
 
-    Scene scene = new Scene(root, 1200, 700);
-
-    stage.setTitle("TSP Art Generator");
-    stage.setScene(scene);
-    stage.setMinWidth(1000);
-    stage.setMinHeight(600);
-    stage.show();
+    primaryStage.setTitle("TSP Art Generator");
+    primaryStage.setScene(scene);
+    primaryStage.setMinWidth(1600);
+    primaryStage.setMinHeight(850);
+    primaryStage.show();
   }
 
   public static void main(String[] args) {
