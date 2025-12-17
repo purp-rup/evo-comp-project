@@ -18,7 +18,7 @@
         <Bug pattern="PREDICTABLE_RANDOM"/>
     </Match>
 
-    <!-- Suppress PATH_TRAVERSAL_IN - desktop GUI app with FileChooser, not web service -->
+    <!-- Suppress PATH_TRAVERSAL_IN - desktop GUI app with file chooser, not web service -->
     <Match>
         <Class name="edu.stockton.project.VoronoiStippler"/>
         <Method name="loadGrayscaleImage"/>
