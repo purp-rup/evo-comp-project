@@ -42,7 +42,6 @@ public class TSPArtExample {
     int populationSize = 100;
     int numElite = 10;
 
-    double bestLength = Double.MAX_VALUE;
     Permutation bestPermutation = null;
 
     System.out.println("-------------------------------------------------");
@@ -69,14 +68,10 @@ public class TSPArtExample {
     String gaStr = String.format("C=%.1f; M=%.1f", crossoverRate, mutationRate);
     System.out.printf("%-25s%12f%n", gaStr, solutionLength);
 
-    if (bestLength > solutionLength) {
-      bestPermutation = solutionPermutation;
-      bestLength = solutionLength;
-    }
+    bestPermutation = solutionPermutation;
 
     // Obtain best coordinates
     double[][] tour = new double[xPoints.length][2];
-    assert bestPermutation != null;
 
     printValue = new StringBuilder();
 

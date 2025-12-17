@@ -19,7 +19,7 @@ public class ProcessingTask extends Task<ProcessingResult> {
   }
 
   @Override
-  protected ProcessingResult call() throws Exception {
+  protected ProcessingResult call() {
     ProcessingResult result = new ProcessingResult();
 
     try {
@@ -107,7 +107,7 @@ public class ProcessingTask extends Task<ProcessingResult> {
   }
 
   /**
-   * Scale coordinates for higher resolution output
+   * Scale coordinates for higher resolution output.
    *
    * @param points Points array [x[], y[]]
    * @param scale Scale factor

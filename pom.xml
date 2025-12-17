@@ -54,21 +54,21 @@
         </dependency>
 
         <!-- ===== JavaFX Dependencies ===== -->
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-controls</artifactId>
-            <version>${javafx.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-fxml</artifactId>
-            <version>${javafx.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-swing</artifactId>
-            <version>${javafx.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.openjfx</groupId>-->
+<!--            <artifactId>javafx-controls</artifactId>-->
+<!--            <version>${javafx.version}</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.openjfx</groupId>-->
+<!--            <artifactId>javafx-fxml</artifactId>-->
+<!--            <version>${javafx.version}</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.openjfx</groupId>-->
+<!--            <artifactId>javafx-swing</artifactId>-->
+<!--            <version>${javafx.version}</version>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>org.openjfx</groupId>
@@ -295,24 +295,24 @@
             <id>analysis</id>
             <build>
                 <plugins>
-                    <plugin>
-                        <groupId>org.hjug.refactorfirst.plugin</groupId>
-                        <artifactId>refactor-first-maven-plugin</artifactId>
-                        <version>0.6.2</version>
-                        <configuration>
-                            <showDetails>true</showDetails>
-                            <analyzeCycles>false</analyzeCycles>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>refactor-first</id>
-                                <phase>test</phase>
-                                <goals>
-                                    <goal>report</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
+<!--                    <plugin>-->
+<!--                        <groupId>org.hjug.refactorfirst.plugin</groupId>-->
+<!--                        <artifactId>refactor-first-maven-plugin</artifactId>-->
+<!--                        <version>0.6.2</version>-->
+<!--                        <configuration>-->
+<!--                            <showDetails>true</showDetails>-->
+<!--                            <analyzeCycles>false</analyzeCycles>-->
+<!--                        </configuration>-->
+<!--                        <executions>-->
+<!--                            <execution>-->
+<!--                                <id>refactor-first</id>-->
+<!--                                <phase>test</phase>-->
+<!--                                <goals>-->
+<!--                                    <goal>report</goal>-->
+<!--                                </goals>-->
+<!--                            </execution>-->
+<!--                        </executions>-->
+<!--                    </plugin>-->
 
                     <plugin>
                         <groupId>com.github.spotbugs</groupId>
@@ -323,7 +323,7 @@
                             <excludeFilterFile>${session.executionRootDirectory}/spotbugs-exclude.xml</excludeFilterFile>
                             <plugins>
                                 <plugin>
-                                    <groupId>com.h3xstream.findsecbugﬁs</groupId>
+                                    <groupId>com.h3xstream.findsecbugs</groupId>
                                     <artifactId>findsecbugs-plugin</artifactId>
                                     <version>1.14.0</version>
                                 </plugin>

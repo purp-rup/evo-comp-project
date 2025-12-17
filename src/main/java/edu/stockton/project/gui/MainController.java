@@ -71,10 +71,8 @@ public class MainController {
   private BufferedImage originalImage;
   private BufferedImage stippledImage;
   private BufferedImage tspArtImage;
-  private double[][] cachedStipplePoints;
   private int currentStep = 0; // 0 = original, 1 = stippled, 2 = tsp
   private boolean isProcessing = false;
-  private File currentImageFile;
   private ProcessingTask currentTask;
 
   @FXML
@@ -252,13 +250,11 @@ public class MainController {
     if (selectedFile != null) {
       try {
         originalImage = ImageIO.read(selectedFile);
-        currentImageFile = selectedFile;
         fileNameLabel.setText(selectedFile.getName());
 
         // Clear previous results
         stippledImage = null;
         tspArtImage = null;
-        cachedStipplePoints = null;
 
         // Display original image
         currentStep = 0;
@@ -302,7 +298,6 @@ public class MainController {
           if (result != null) {
             stippledImage = result.stippledImage;
             tspArtImage = result.tspArtImage;
-            cachedStipplePoints = result.stipplePoints;
 
             // Display results
             currentStep = 2; // Jump to final result
@@ -432,8 +427,8 @@ public class MainController {
 
   @FXML
   private void onSaveImage() {
-    BufferedImage imageToSave = null;
-    String defaultName = "";
+    BufferedImage imageToSave;
+    String defaultName;
 
     // Determine which image to save based on current step
     switch (currentStep) {
@@ -449,6 +444,9 @@ public class MainController {
         imageToSave = tspArtImage;
         defaultName = "tsp-art.png";
         break;
+      default:
+        System.err.println("Invalid step: " + currentStep);
+        return;
     }
 
     if (imageToSave == null) {
@@ -521,6 +519,9 @@ public class MainController {
       case 2:
         imageToDisplay = tspArtImage;
         stepName = "TSP Art";
+        break;
+      default:
+        System.err.println("Invalid step: " + currentStep);
         break;
     }
 

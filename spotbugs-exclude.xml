@@ -1,0 +1,27 @@
+<FindBugsFilter>
+    <!-- Suppress EI_EXPOSE_REP2 warnings - storing references is safe for internal GUI app -->
+    <Match>
+        <Class name="edu.stockton.project.VoronoiStippler"/>
+        <Method name="&lt;init&gt;"/>
+        <Bug pattern="EI_EXPOSE_REP2"/>
+    </Match>
+
+    <Match>
+        <Class name="edu.stockton.project.gui.ProcessingTask"/>
+        <Method name="&lt;init&gt;"/>
+        <Bug pattern="EI_EXPOSE_REP2"/>
+    </Match>
+
+    <!-- Suppress PREDICTABLE_RANDOM - using Random() for reproducible art generation, not security -->
+    <Match>
+        <Class name="edu.stockton.project.VoronoiStippler"/>
+        <Bug pattern="PREDICTABLE_RANDOM"/>
+    </Match>
+
+    <!-- Suppress PATH_TRAVERSAL_IN - desktop GUI app with FileChooser, not web service -->
+    <Match>
+        <Class name="edu.stockton.project.VoronoiStippler"/>
+        <Method name="loadGrayscaleImage"/>
+        <Bug pattern="PATH_TRAVERSAL_IN"/>
+    </Match>
+</FindBugsFilter>

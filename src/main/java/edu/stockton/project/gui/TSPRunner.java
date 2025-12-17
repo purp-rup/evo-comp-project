@@ -21,7 +21,6 @@ import org.knowm.xchart.style.markers.SeriesMarkers;
 /** Handles TSP solving with progress reporting and configurable parameters for GUI integration. */
 public class TSPRunner {
 
-  /** Progress callback interface for reporting TSP solving progress. */
   @FunctionalInterface
   public interface ProgressCallback {
     void onProgress(int current, int total, String message);
@@ -47,8 +46,7 @@ public class TSPRunner {
     int maxGenerations = config.getMaxGenerations();
     int numElite = config.getEliteCount();
 
-    double bestLength = Double.MAX_VALUE;
-    Permutation bestPermutation = null;
+    Permutation bestPermutation;
 
     if (config.isGridSearch()) {
       // Grid search mode - test multiple parameter combinations
@@ -94,7 +92,20 @@ public class TSPRunner {
     return permutationToTour(bestPermutation, xPoints, yPoints);
   }
 
-  /** Run grid search over parameter space */
+  /**
+   * Run grid search over parameter space to find optimal EA configuration. Tests all combinations
+   * of crossover and mutation rates within specified ranges.
+   *
+   * @param xPoints Array of x-coords
+   * @param yPoints Array of y-coords
+   * @param problem The TSP problem instance
+   * @param config Parameter configuration containing search ranges
+   * @param populationSize Size of the EA population
+   * @param maxGenerations Maximum number of generations to run
+   * @param numElite Number of elite individuals to preserve
+   * @param callback Progress callback for reporting status (can be null)
+   * @return Best permutation found across all tested combinations
+   */
   private static Permutation runGridSearch(
       double[] xPoints,
       double[] yPoints,
@@ -105,6 +116,7 @@ public class TSPRunner {
       int numElite,
       ProgressCallback callback) {
 
+    // Get grid search parameters
     double crossoverMin = config.getCrossoverMin();
     double crossoverMax = config.getCrossoverMax();
     double crossoverStep = config.getCrossoverStep();
@@ -183,7 +195,19 @@ public class TSPRunner {
     return bestPermutation;
   }
 
-  /** Run a single EA with specified parameters */
+  /**
+   * Run a single EA with specified parameters.
+   *
+   * @param xPoints Array of x-coords
+   * @param yPoints Array of y-coords
+   * @param problem The TSP problem instance
+   * @param crossoverRate Crossover rate for the EA
+   * @param mutationRate Mutation rate for the EA
+   * @param populationSize Size of the EA population
+   * @param maxGenerations Maximum number of generations to run
+   * @param numElite Number of elite individuals to preserve
+   * @return Best permutation found by the EA
+   */
   private static Permutation runSingleEA(
       double[] xPoints,
       double[] yPoints,
@@ -210,7 +234,15 @@ public class TSPRunner {
     return solution.getSolution();
   }
 
-  /** Convert permutation to tour coordinate array */
+  /**
+   * Convert permutation to tour coordinate array. Transforms the permutation indices into ordered
+   * x-y coordinate pairs.
+   *
+   * @param permutation The solution permutation from the EA
+   * @param xPoints Array of x-coords
+   * @param yPoints Array of y-coords
+   * @return double[][] where each row is [x, y] coordinates of a stipple in tour order
+   */
   private static double[][] permutationToTour(
       Permutation permutation, double[] xPoints, double[] yPoints) {
 
@@ -218,21 +250,20 @@ public class TSPRunner {
     double[][] tour = new double[order.length][2];
 
     for (int i = 0; i < order.length; i++) {
-      int cityIndex = order[i];
-      tour[i][0] = xPoints[cityIndex];
-      tour[i][1] = yPoints[cityIndex];
+      int stippleIndex = order[i];
+      tour[i][0] = xPoints[stippleIndex];
+      tour[i][1] = yPoints[stippleIndex];
     }
 
     return tour;
   }
 
   /**
-   * Draw TSP tour using XChart library (same as TSPArtExample) Returns BufferedImage instead of
-   * saving to file
+   * Draw TSP tour using XChart library.
    *
-   * @param tour Tour as double[n][2] array
-   * @param dimensions int[2] array with [width, height]
-   * @return BufferedImage with the tour drawn using XChart
+   * @param tour Tour as double[][] where each row is [x, y]
+   * @param dimensions int[2] array with [width, height] of output image
+   * @return BufferedImage with the tour drawn as connected line segments
    */
   public static BufferedImage drawTourToImage(double[][] tour, int[] dimensions) {
     // Extract x and y coordinates from the tour

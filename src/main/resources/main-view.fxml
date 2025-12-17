@@ -214,7 +214,7 @@
 
                     <!-- Stippled Image View -->
                     <VBox spacing="8" alignment="CENTER" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
-                        <Label text="Stippled Image" styleClass="display-subtitle"/>
+                        <Label text="Multi-view" styleClass="display-subtitle"/>
                         <StackPane styleClass="image-container"
                                    VBox.vgrow="ALWAYS" maxWidth="800" maxHeight="800">
                             <ImageView fx:id="stippledImageView" preserveRatio="true" smooth="true"
