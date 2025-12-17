@@ -2,10 +2,10 @@
 
 ## Highlights
 - **Automated Image Processing**: Converts any input image into a set of points for TSP tour generation.
-- **Voronoi Stippling**: Uses a weighted voronoi stippling algorithm to extract points from images.
-- **Customizable Parameters**: Adjustable settings for number of cities and algorithm-specific parameters to control output fidelity.
+- **Voronoi Stippling**: Uses a weighted Voronoi stippling algorithm to extract points from images.
+- **Customizable Parameters**: Adjustable settings for number of stipples and algorithm-specific parameters to control output fidelity.
 - **Visualization**: Image display showing each step of the process.
-- **User-Friendly Interface**: Intuitive GUI built with Swing for easy algorithm selection and parameter configuration.
+- **User-Friendly Interface**: Intuitive GUI built with JavaFX for easy algorithm selection and parameter configuration.
 
 ## Overview
 The TSP Art Generator is a Java application that creates art using Traveling Salesman Problem (TSP) tours. Unlike traditional TSP art implementations that require predetermined city lists, this tool automates the entire process by accepting any image as input, stippling it, and running your evolutionary algorithm configuration.
