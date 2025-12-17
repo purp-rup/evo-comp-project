@@ -3,6 +3,10 @@
  *   This file was created with help from Claude Sonnet 4.5.
  *   It was used to help create the backend logic for the GUI as seen in this file.
  *   All functions in this file specifically were generated.
+ *
+ *   Total lines of code ~= 2455
+ *   Generated lines of code ~= 486
+ *   AI generated code ~= 19%
  */
 
 package edu.stockton.project.gui;
