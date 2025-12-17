@@ -1,0 +1,18 @@
+# Project Report
+
+## Introduction
+The TSP Art Generator is an application project that takes in any input image and turns it into a set of points for TSP tour generation. Traditional Traveling Salesman Problem (TSP) tours generally work by predetermined city lists, but this tool is able to automate the entire process through the use of Voronoi Stippling and the evolutionary algorithm configuration. The TSP environment was setup with the use of the Chips-n-Salsa library. From the evolutionary algorithm configuration, we used two approaches in tandem to refine the TSP tours. 
+The Generational Evolutionary Algorithm was used to take the population and replace it with offspring in each each generation. The code performs a paramter sweep, iterating through crossover rates and mutation rates with the goal of empirically determining which combination of probabilities yields the lowest tour cost. To follow up, the Adaptive Evolutionary Algorithm then self tunes the control parameters during execution based on the population's performance to remove the need for manual tuning. It is essential to minimize tour length to reduce the number of long lines jumping across the image.
+As an application, the main purpose is, as stated before, to generate images from TSP into art. Art in this case could be considered as a continuous line drawing. To implement this, we used Voronoi Stippling, which distrubtes points based off of image brightness. Darker regions attract more points, while lighter regions receive fewer. Lloyd's Algorithm was used to ensure the points for image genration look more natural than clumpy. 
+
+## Functionality
+The process begins with the image generation, which can be anything so long as it is a static image format. With the provided image, it goes through our Voronoi Stippler that plots points that the TSP can use as reference points (or cities in relation to TSP). We had the stippler provide more points in denser parts of the image in order to better outline image detail. The amount of points is customizable, but we found 10,000 to work the best. From here, the Evolutionary Algorithm takes over to perform a grid search over different Mutation and Crossover rates ranging from 0.1 to 0.95, looking for the best parameters to produce the shortest possible tour length. By minimizing this tour length, the algorithm reduces the number of long lines that jump across the image. Lastly, the main method brings these points together and draws the lines between the points in optimzed order to create and render the final artwork.
+
+## Conclusion
+Through the use of a Voronai Stippler, our application is able to take any static image and turn it into artwork with the help of TSP. The Evolutionary Algorithm plays a big part in framing together the Stippled points by treating it as a Traveling Salesman Problem. 
+
+## References
+Vincent A. Cicirello. Chips-n-Salsa: A Java Library of Customizable, Hybridizable, Iterative, Parallel, Stochastic, and Self-Adaptive Local Search Algorithms. Journal of Open Source Software, 5(52), 2448, August 2020. doi:10.21105/joss.02448 [PDF] [BIB] [DOI]
+Vincent A. Cicirello. Open Source Evolutionary Computation with Chips-n-Salsa. In Proceedings of the 16th International Joint Conference on Computational Intelligence, pages 330-337. November 2024. doi:10.5220/0013040600003837 [PDF] [BIB] [DOI]
+Adrian Secord Weighted Voronoi Stippling https://www.cs.ubc.ca/labs/imager/tr/2002/secord2002b/secord.2002b.pdf
+Simon Barthelmé https://dahtah.github.io/imager/stippling.html 
