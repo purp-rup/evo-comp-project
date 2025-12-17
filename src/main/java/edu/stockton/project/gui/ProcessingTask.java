@@ -5,8 +5,8 @@ import java.awt.image.BufferedImage;
 import javafx.concurrent.Task;
 
 /**
- * Background task for processing images with stippling and TSP Reports progress to the UI during
- * execution
+ * Background task for processing images with stippling and TSP . Reports progress to the UI during
+ * execution.
  */
 public class ProcessingTask extends Task<ProcessingResult> {
 
@@ -23,7 +23,7 @@ public class ProcessingTask extends Task<ProcessingResult> {
     ProcessingResult result = new ProcessingResult();
 
     try {
-      // Phase 1: Stippling (0% - 50%)
+      // Step 1: Stippling (0% - 50%)
       updateMessage("Initializing stippling...");
       updateProgress(0, 100);
 
@@ -67,7 +67,7 @@ public class ProcessingTask extends Task<ProcessingResult> {
         scaledPoints = scalePoints(result.stipplePoints, scaleFactor);
       }
 
-      // Phase 2: TSP Solving (50% - 100%)
+      // Step 2: TSP Solving (50% - 100%)
       updateMessage("Solving TSP...");
       updateProgress(55, 100);
 

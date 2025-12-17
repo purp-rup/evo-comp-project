@@ -1,3 +1,10 @@
+/*
+ * AI DISCLOSURE:
+ *   This file was created with help from Claude Sonnet 4.5.
+ *   It was used to help create the backend logic for the GUI as seen in this file.
+ *   All functions in this file specifically were generated.
+ */
+
 package edu.stockton.project.gui;
 
 import java.awt.image.BufferedImage;
@@ -12,7 +19,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javax.imageio.ImageIO;
 
-/** Controller for the main TSP Art Generator GUI */
+/** Controller for the main TSP Art Generator GUI. */
 public class MainController {
 
   // FXML Components - Control Panel
@@ -141,8 +148,7 @@ public class MainController {
             "Insertion Mutation",
             "Rotation Mutation",
             "Scramble Mutation",
-            "Block Move Mutation",
-            "Cycle Mutation");
+            "Block Move Mutation");
     mutationComboBox.setValue("Reversal Mutation");
 
     // Crossover operators from Chips-n-Salsa

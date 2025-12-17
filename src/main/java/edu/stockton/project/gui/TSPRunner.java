@@ -7,9 +7,7 @@ import org.cicirello.search.SolutionCostPair;
 import org.cicirello.search.evo.FitnessProportionalSelection;
 import org.cicirello.search.evo.GenerationalEvolutionaryAlgorithm;
 import org.cicirello.search.evo.InverseCostFitnessFunction;
-import org.cicirello.search.operators.permutations.EnhancedEdgeRecombination;
-import org.cicirello.search.operators.permutations.PermutationInitializer;
-import org.cicirello.search.operators.permutations.ReversalMutation;
+import org.cicirello.search.operators.permutations.*;
 import org.cicirello.search.problems.tsp.TSP;
 import org.knowm.xchart.BitmapEncoder;
 import org.knowm.xchart.XYChart;
@@ -45,6 +43,8 @@ public class TSPRunner {
     int populationSize = config.getPopulationSize();
     int maxGenerations = config.getMaxGenerations();
     int numElite = config.getEliteCount();
+    String mutationOp = config.getMutationOperator();
+    String crossoverOp = config.getCrossoverOperator();
 
     Permutation bestPermutation;
 
@@ -78,6 +78,8 @@ public class TSPRunner {
               problem,
               crossoverRate,
               mutationRate,
+              mutationOp,
+              crossoverOp,
               populationSize,
               maxGenerations,
               numElite);
@@ -123,6 +125,8 @@ public class TSPRunner {
     double mutationMin = config.getMutationMin();
     double mutationMax = config.getMutationMax();
     double mutationStep = config.getMutationStep();
+    String mutationOp = config.getMutationOperator();
+    String crossoverOp = config.getCrossoverOperator();
 
     // Calculate total combinations
     int totalCombinations = 0;
@@ -164,6 +168,8 @@ public class TSPRunner {
                 problem,
                 crossoverRate,
                 mutationRate,
+                mutationOp,
+                crossoverOp,
                 populationSize,
                 maxGenerations,
                 numElite);
@@ -214,6 +220,8 @@ public class TSPRunner {
       TSP.Double problem,
       double crossoverRate,
       double mutationRate,
+      String mutationOperator,
+      String crossoverOperator,
       int populationSize,
       int maxGenerations,
       int numElite) {
@@ -221,9 +229,9 @@ public class TSPRunner {
     GenerationalEvolutionaryAlgorithm<Permutation> ea =
         new GenerationalEvolutionaryAlgorithm<>(
             populationSize,
-            new ReversalMutation(),
+            createMutationOperator(mutationOperator),
             mutationRate,
-            new EnhancedEdgeRecombination(),
+            createCrossoverOperator(crossoverOperator),
             crossoverRate,
             new PermutationInitializer(xPoints.length),
             new InverseCostFitnessFunction<>(problem),
@@ -306,7 +314,65 @@ public class TSPRunner {
     series.setMarker(SeriesMarkers.NONE);
     series.setLineWidth(1.0f);
 
-    // Convert chart to BufferedImage instead of saving to file
+    // Convert chart to BufferedImage
     return BitmapEncoder.getBufferedImage(chart);
+  }
+
+  /**
+   * Create mutation operator based on name.
+   *
+   * @param operatorName The name of the mutation operator
+   * @return The mutation operator instance
+   */
+  private static org.cicirello.search.operators.MutationOperator<Permutation>
+      createMutationOperator(String operatorName) {
+    switch (operatorName) {
+      case "Reversal Mutation":
+        return new ReversalMutation();
+      case "Swap Mutation":
+        return new SwapMutation();
+      case "Insertion Mutation":
+        return new InsertionMutation();
+      case "Rotation Mutation":
+        return new RotationMutation();
+      case "Scramble Mutation":
+        return new ScrambleMutation();
+      case "Block Move Mutation":
+        return new BlockMoveMutation();
+      default:
+        System.err.println("Unknown mutation operator: " + operatorName);
+        return new ReversalMutation();
+    }
+  }
+
+  /**
+   * Create crossover operator based on name.
+   *
+   * @param operatorName The name of the crossover operator
+   * @return The crossover operator instance
+   */
+  private static org.cicirello.search.operators.CrossoverOperator<Permutation>
+      createCrossoverOperator(String operatorName) {
+    switch (operatorName) {
+      case "Enhanced Edge Recombination":
+        return new EnhancedEdgeRecombination();
+      case "Cycle Crossover (CX)":
+        return new CycleCrossover();
+      case "Order Crossover (OX)":
+        return new OrderCrossover();
+      case "Partially Matched Crossover (PMX)":
+        return new PartiallyMatchedCrossover();
+      case "Uniform Order-Based Crossover (UOBX)":
+        return new UniformOrderBasedCrossover();
+      case "Non-Wrapping Order Crossover (NWOX)":
+        return new NonWrappingOrderCrossover();
+      case "Uniform Partially Matched Crossover (UPMX)":
+        return new UniformPartiallyMatchedCrossover();
+      case "Position Based Crossover (PBX)":
+        return new PositionBasedCrossover();
+      default:
+        System.err.println("Unknown crossover operator: " + operatorName);
+        return new EnhancedEdgeRecombination();
+    }
   }
 }

@@ -12,21 +12,6 @@
             stylesheets="@style.css"
             minWidth="1200" minHeight="700">
 
-    <!-- Top Menu Bar -->
-    <top>
-        <MenuBar>
-            <Menu text="File">
-                <MenuItem text="Open Image..." onAction="#onLoadImage"/>
-                <MenuItem text="Save Current Image..." onAction="#onSaveImage"/>
-                <SeparatorMenuItem/>
-                <MenuItem text="Exit"/>
-            </Menu>
-<!--            <Menu text="Help">-->
-<!--                <MenuItem text="About"/>-->
-<!--            </Menu>-->
-        </MenuBar>
-    </top>
-
     <!-- Main Content Area -->
     <center>
         <HBox spacing="10" styleClass="content-area">
@@ -36,7 +21,7 @@
 
             <!-- Left Panel - Control Panel with ScrollPane -->
             <ScrollPane fitToWidth="true" styleClass="control-scroll-pane"
-                        hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+                        hbarPolicy="NEVER"
                         prefWidth="320" minWidth="320" maxWidth="320">
                 <VBox spacing="15" styleClass="control-panel">
 
@@ -106,8 +91,8 @@
                                 <Label text="Crossover Min:" styleClass="label-primary"/>
                                 <Label fx:id="crossoverMinLabel" styleClass="value-label"/>
                             </HBox>
-                            <Slider fx:id="crossoverMinSlider" min="0" max="1" value="0.1"
-                                    blockIncrement="0.05" showTickMarks="false"/>
+                            <Slider fx:id="crossoverMinSlider" max="1" value="0.1"
+                                    blockIncrement="0.05"/>
                         </VBox>
 
                         <VBox spacing="5">
@@ -115,8 +100,8 @@
                                 <Label text="Crossover Max:" styleClass="label-primary"/>
                                 <Label fx:id="crossoverMaxLabel" styleClass="value-label"/>
                             </HBox>
-                            <Slider fx:id="crossoverMaxSlider" min="0" max="1" value="0.9"
-                                    blockIncrement="0.05" showTickMarks="false"/>
+                            <Slider fx:id="crossoverMaxSlider" max="1" value="0.9"
+                                    blockIncrement="0.05"/>
                         </VBox>
 
                         <HBox spacing="10" alignment="CENTER_LEFT">
@@ -130,8 +115,8 @@
                                 <Label text="Mutation Min:" styleClass="label-primary"/>
                                 <Label fx:id="mutationMinLabel" styleClass="value-label"/>
                             </HBox>
-                            <Slider fx:id="mutationMinSlider" min="0" max="1" value="0.1"
-                                    blockIncrement="0.05" showTickMarks="false"/>
+                            <Slider fx:id="mutationMinSlider" max="1" value="0.1"
+                                    blockIncrement="0.05"/>
                         </VBox>
 
                         <VBox spacing="5">
@@ -139,8 +124,8 @@
                                 <Label text="Mutation Max:" styleClass="label-primary"/>
                                 <Label fx:id="mutationMaxLabel" styleClass="value-label"/>
                             </HBox>
-                            <Slider fx:id="mutationMaxSlider" min="0" max="1" value="0.9"
-                                    blockIncrement="0.05" showTickMarks="false"/>
+                            <Slider fx:id="mutationMaxSlider" max="1" value="0.9"
+                                    blockIncrement="0.05"/>
                         </VBox>
 
                         <HBox spacing="10" alignment="CENTER_LEFT">
@@ -158,8 +143,8 @@
                                 <Label text="Crossover Rate:" styleClass="label-primary"/>
                                 <Label fx:id="manualCrossoverLabel" styleClass="value-label"/>
                             </HBox>
-                            <Slider fx:id="manualCrossoverSlider" min="0" max="1" value="0.5"
-                                    blockIncrement="0.05" showTickMarks="false"/>
+                            <Slider fx:id="manualCrossoverSlider" max="1" value="0.5"
+                                    blockIncrement="0.05"/>
                         </VBox>
 
                         <VBox spacing="5">
@@ -167,8 +152,8 @@
                                 <Label text="Mutation Rate:" styleClass="label-primary"/>
                                 <Label fx:id="manualMutationLabel" styleClass="value-label"/>
                             </HBox>
-                            <Slider fx:id="manualMutationSlider" min="0" max="1" value="0.5"
-                                    blockIncrement="0.05" showTickMarks="false"/>
+                            <Slider fx:id="manualMutationSlider" max="1" value="0.5"
+                                    blockIncrement="0.05"/>
                         </VBox>
                     </VBox>
 
@@ -217,7 +202,7 @@
                         <Label text="Multi-view" styleClass="display-subtitle"/>
                         <StackPane styleClass="image-container"
                                    VBox.vgrow="ALWAYS" maxWidth="800" maxHeight="800">
-                            <ImageView fx:id="stippledImageView" preserveRatio="true" smooth="true"
+                            <ImageView fx:id="stippledImageView" preserveRatio="true"
                                        fitWidth="600" fitHeight="600"/>
                         </StackPane>
                     </VBox>
@@ -227,7 +212,7 @@
                         <Label text="TSP Art Result" styleClass="display-subtitle"/>
                         <StackPane styleClass="image-container"
                                    VBox.vgrow="ALWAYS" maxWidth="800" maxHeight="800">
-                            <ImageView fx:id="tspArtImageView" preserveRatio="true" smooth="true"
+                            <ImageView fx:id="tspArtImageView" preserveRatio="true"
                                        fitWidth="600" fitHeight="600"/>
                         </StackPane>
                     </VBox>
@@ -236,10 +221,10 @@
 
                 <!-- Navigation Controls -->
                 <HBox spacing="15" alignment="CENTER">
-                    <Button fx:id="previousStepButton" text="◀ Previous" onAction="#onPreviousStep"
+                    <Button fx:id="previousStepButton" text="Previous" onAction="#onPreviousStep"
                             styleClass="button-nav"/>
                     <Label fx:id="stepLabel" text="Step 1 of 3: Original" styleClass="label-step"/>
-                    <Button fx:id="nextStepButton" text="Next ▶" onAction="#onNextStep"
+                    <Button fx:id="nextStepButton" text="Next" onAction="#onNextStep"
                             styleClass="button-nav"/>
                     <Region HBox.hgrow="ALWAYS"/>
                     <Button fx:id="saveImageButton" text="Save Current Image" onAction="#onSaveImage"
